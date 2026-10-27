@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesbook.com - የዲጂታል መጽሐፍ መድረክ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function TesbookApp() {
+            const [lang, setLang] = React.useState('am');
+            const [activeTab, setActiveTab] = React.useState('store');
+            const [books, setBooks] = React.useState([
+                { id: 1, title: 'የተፈጥሮ ሚስጥር', author: 'ተስፋዬ አለልኝ', price: '150 ETB', category: 'ተፈጥሮ እና ሕይወት', cover: '🌿' },
+                { id: 2, title: 'የነፃነት ጎህ ሲቀድ', author: 'ተስፋዬ አለልኝ', price: '200 ETB', category: 'ፍልስፍና', cover: '🌅' },
+            ]);
+
+            const [newTitle, setNewTitle] = React.useState('');
+            const [newPrice, setNewPrice] = React.useState('');
+            const [newCategory, setNewCategory] = React.useState('');
+
+            const [aiPrompt, setAiPrompt] = React.useState('');
+            const [aiResponse, setAiResponse] = React.useState('');
+
+            const [cbeAccount, setCbeAccount] = React.useState('1000123456789 (ተስፋዬ አለልኝ)');
+            const [telebirrAccount, setTelebirrAccount] = React.useState('0911234567 (ተስፋዬ አለልኝ)');
+
+            const handlePublish = (e) => {
+                e.preventDefault();
+                if (!newTitle || !newPrice) return;
+                const book = {
+                    id: books.length + 1,
+                    title: newTitle,
+                    author: 'ተስፋዬ አለልኝ (Tes)',
+                    price: newPrice,
+                    category: newCategory || 'አጠቃላይ',
+                    cover: '📖'
+                };
+                setBooks([book, ...books]);
+                setNewTitle('');
+                setNewPrice('');
+                setNewCategory('');
+                alert(lang === 'am' ? 'መጽሐፉ በተሳካ ሁኔታ ታትሟል!' : 'Book published successfully!');
+                setActiveTab('store');
+            };
+
+            const askAi = () => {
+                if (!aiPrompt) return;
+                setAiResponse(
+                    lang === 'am'
+                        ? `የ Gemini AI ረዳት መልስ ለ "${aiPrompt}": ይህ መጽሐፍ አንባቢዎችን በከፍተኛ ሁኔታ የሚስብ፣ ግልጽና ማራኪ ቋንቋ የተጻፈ እንዲሆን ማድረግ ይቻላል። ለቲክቶክ እና ቴሌግራም የሚሆን አጭር ማስታወቂያ፡ "የሕይወትህን ከፍታ ለመድረስ ይህንን መጽሐፍ አንብብ!"`
+                        : `Gemini AI Assistant response for "${aiPrompt}": This book concept has great potential for readers. Recommended TikTok caption: "Discover the new world of knowledge with Tesbook!"`
+                );
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-between">
+                    <div>
+                        <header className="bg-emerald-700 text-white shadow-md sticky top-0 z-50">
+                            <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                                <span className="text-2xl font-bold tracking-wider">📚 Tesbook.com</span>
+                                <button 
+                                    onClick={() => setLang(lang === 'am' ? 'en' : 'am')}
+                                    className="bg-emerald-800 px-3 py-1 rounded text-sm font-semibold border border-emerald-600"
+                                >
+                                    {lang === 'am' ? 'English 🌐' : 'አማርኛ 🌐'}
+                                </button>
+                            </div>
+                            <nav className="bg-emerald-800 px-4 flex space-x-4 overflow-x-auto text-sm">
+                                <button onClick={() => setActiveTab('store')} className={`py-2 px-3 border-b-2 font-medium ${activeTab === 'store' ? 'border-white text-white' : 'border-transparent text-emerald-200'}`}> {lang === 'am' ? '🏠 መደብር (Store)' : '🏠 Store'} </button> <button onClick={() => setActiveTab('publish')} className={`py-2 px-3 border-b-2 font-medium ${activeTab === 'publish' ? 'border-white text-white' : 'border-transparent text-emerald-200'}`}>
+                                    {lang === 'am' ? '✍️ መጽሐፍ ጫን (Publish)' : '✍️ Publish'}
+                                </button>
+                                <button onClick={() => setActiveTab('ai')} className={`py-2 px-3 border-b-2 font-medium ${activeTab === 'ai' ? 'border-white text-white' : 'border-transparent text-emerald-200'}`}> {lang === 'am' ? '🤖 AI ረዳት (AI Agent)' : '🤖 AI Agent'} </button> <button onClick={() => setActiveTab('admin')} className={`py-2 px-3 border-b-2 font-medium ${activeTab === 'admin' ? 'border-white text-white' : 'border-transparent text-emerald-200'}`}>
+                                    {lang === 'am' ? '⚙️ የባለቤት ፓነል (Admin)' : '⚙️ Owner Panel'}
+                                </button>
+                                <button onClick={() => setActiveTab('guide')} className={`py-2
